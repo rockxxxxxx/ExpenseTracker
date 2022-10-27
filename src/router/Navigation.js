@@ -1,5 +1,5 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, Outlet, Link } from "react-router-dom";
 import Wave from "../component/wave/Wave";
 import "./navigation.css";
 
@@ -30,13 +30,21 @@ export default function Navigation() {
                 <NavLink className="nav-link ">Product</NavLink>
               </li>
               <li class="nav-item">
-                <NavLink className="nav-link ">About Us</NavLink>
+                <NavLink className="nav-link " to="/signup">
+                  Signup
+                </NavLink>
+              </li>
+              <li class="nav-item">
+                <NavLink className="nav-link " to="/signup">
+                  About Us
+                </NavLink>
               </li>
             </div>
           </div>
         </div>
       </nav>
       <Wave />
+      <Outlet />
     </>
   );
 }

@@ -1,16 +1,19 @@
 import React, { useContext, useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import useFormValidator from "../../hooks/useFormValidator";
 import Card from "../cards/Card";
+import { LoginContext } from "../context/loginContext";
 import { ToasterContext } from "../context/toasterContext";
 import Loader from "../loader/Loader";
 import Toast from "../toast/Toast";
-import "./signup.css";
+import "./login.css";
 
 const emailValidator = (value) => value.includes("@");
 const passwordValidator = (value) => value.length > 6;
 
-export default function Signup() {
+export default function Login() {
+  const navigate = useNavigate();
+  const { setIsLoggedIn, setJwtToken, setUserEmail } = useContext(LoginContext);
   const [loader, setLoader] = useState(false);
   const { isMessage, setIsMessage, isToaster, setIsToaster } =
     useContext(ToasterContext);
@@ -33,21 +36,10 @@ export default function Signup() {
     reset: passwordReset,
   } = useFormValidator(passwordValidator);
 
-  const confirmPassValidator = (value) => enteredPaasword === value;
-
-  const {
-    value: confirmPaasword,
-    isValid: confirmpasswordIsValid,
-    hasError: confirmpasswordInputHasError,
-    inputChangeHandler: confirmpasswordChangeHandler,
-    onBlurHandler: confirmpasswordBlurHandler,
-    reset: confirmpasswordReset,
-  } = useFormValidator(confirmPassValidator);
-
   console.log(isMessage);
 
   let formIsValid = false;
-  if (emailIsValid && passwordIsValid && confirmpasswordIsValid && !loader) {
+  if (emailIsValid && passwordIsValid) {
     formIsValid = true;
   }
   const formValue = {
@@ -62,7 +54,7 @@ export default function Signup() {
     if (formIsValid) {
       setLoader(true);
       fetch(
-        "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCJx5BaRP2wpkK7EusD5XYqdvO-F3eTyQs",
+        "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCJx5BaRP2wpkK7EusD5XYqdvO-F3eTyQs",
         {
           method: "POST",
           body: JSON.stringify(formValue),
@@ -70,36 +62,36 @@ export default function Signup() {
             "Content-Type": "application/json",
           },
         }
-      ).then((res) => {
-        setSubmitVisible(true);
-        setLoader(false);
-        if (res.ok) {
-          setIsMessage({
-            message: "You have successfully registered",
-            type: "success",
-          });
-          setIsToaster(true);
-          emailReset();
-          passwordReset();
-          confirmpasswordReset();
-        } else {
-          return res.json().then((data) => {
-            if (data.error.message === "EMAIL_EXISTS") {
+      )
+        .then((res) => {
+          setSubmitVisible(true);
+          setLoader(false);
+          if (res.ok) {
+            setIsMessage({
+              message: "You have successfully Logged in",
+              type: "success",
+            });
+            setIsToaster(true);
+            emailReset();
+            passwordReset();
+            navigate("/home");
+            return res.json();
+          } else {
+            return res.json().then((data) => {
               setIsMessage({
-                message: "This email is already registerd",
+                message: "Email or Password is wrong",
                 type: "danger",
               });
               setIsToaster(true);
-            } else {
-              setIsMessage({
-                message: "Something went wrong! Please again later",
-                type: "danger",
-              });
-              setIsToaster(true);
-            }
-          });
-        }
-      });
+            });
+          }
+        })
+        .then((data) => {
+          setJwtToken(data.idToken);
+          setUserEmail(data.email);
+          localStorage.setItem("auth_token", data.idToken);
+          localStorage.setItem("email", data.email);
+        });
     } else {
       setSubmitVisible(true);
       setLoader(false);
@@ -111,8 +103,8 @@ export default function Signup() {
 
   return (
     <>
-      <div className="container signup">
-        <Card title="Signup">
+      <div className="container login">
+        <Card title="Login">
           <form onSubmit={onSubmitHandler}>
             <div className="mb-3">
               <label htmlFor="email" className="form-label">
@@ -127,7 +119,7 @@ export default function Signup() {
                 onChange={emailChangeHandler}
                 onBlur={emailBlurHandler}
               />
-              <div id="signup-error" className="form-text">
+              <div id="login-error" className="form-text">
                 {emailInputHasError && "Please enter a valid email address"}
               </div>
             </div>
@@ -143,26 +135,6 @@ export default function Signup() {
                 onChange={passwordChangeHandler}
                 onBlur={passwordBlurHandler}
               />
-              <div id="signup-error" className="form-text">
-                {passwordInputHasError &&
-                  "Please enter the password greater than 6 character"}
-              </div>
-            </div>
-            <div className="mb-3">
-              <label htmlFor="confirmPassword" className="form-label">
-                Confirm Password
-              </label>
-              <input
-                type="password"
-                className="form-control"
-                id="confirrm Password"
-                value={confirmPaasword}
-                onChange={confirmpasswordChangeHandler}
-                onBlur={confirmpasswordBlurHandler}
-              />
-              <div id="signup-error" className="form-text">
-                {confirmpasswordInputHasError && "Password not matched"}
-              </div>
             </div>
 
             {submitVisible && (
@@ -179,7 +151,7 @@ export default function Signup() {
       </div>
       <div class="mx-auto" style={{ textAlign: "center", paddingTop: "3rem" }}>
         <span class="border border-primary p-3">
-          Already have an account? <NavLink to="/login">Login</NavLink>
+          Don't have an account? <NavLink to="/signup">Signup</NavLink>
         </span>
       </div>
     </>
