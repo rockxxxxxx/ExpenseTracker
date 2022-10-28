@@ -15,6 +15,8 @@ export const LoginProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(token === null ? false : true);
   const [jwtToken, setJwtToken] = useState(token);
   const [userEmail, setUserEmail] = useState(email);
+
+  console.log(jwtToken);
   const value = {
     isLoggedIn,
     setIsLoggedIn,

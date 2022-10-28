@@ -5,14 +5,20 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { ToasterContextProvider } from "./component/context/toasterContext";
 import { BrowserRouter } from "react-router-dom";
+import { ModalContextProvider } from "./component/context/modalContext";
+import { LoginProvider } from "./component/context/loginContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-      <ToasterContextProvider>
-        <App />
-      </ToasterContextProvider>
+      <LoginProvider>
+        <ModalContextProvider>
+          <ToasterContextProvider>
+            <App />
+          </ToasterContextProvider>
+        </ModalContextProvider>
+      </LoginProvider>
     </BrowserRouter>
   </React.StrictMode>
 );

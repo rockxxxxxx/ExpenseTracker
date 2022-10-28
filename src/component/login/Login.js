@@ -13,7 +13,8 @@ const passwordValidator = (value) => value.length > 6;
 
 export default function Login() {
   const navigate = useNavigate();
-  const { setIsLoggedIn, setJwtToken, setUserEmail } = useContext(LoginContext);
+  const { setIsLoggedIn, setJwtToken, setUserEmail, jwtToken } =
+    useContext(LoginContext);
   const [loader, setLoader] = useState(false);
   const { isMessage, setIsMessage, isToaster, setIsToaster } =
     useContext(ToasterContext);
@@ -35,8 +36,6 @@ export default function Login() {
     onBlurHandler: passwordBlurHandler,
     reset: passwordReset,
   } = useFormValidator(passwordValidator);
-
-  console.log(isMessage);
 
   let formIsValid = false;
   if (emailIsValid && passwordIsValid) {
@@ -95,7 +94,6 @@ export default function Login() {
     } else {
       setSubmitVisible(true);
       setLoader(false);
-      console.log("not valid");
       emailBlurHandler();
       passwordBlurHandler();
     }
