@@ -8,6 +8,7 @@ import Loader from "../loader/Loader";
 import axios from "axios";
 import { LoginContext } from "../context/loginContext";
 import Toast from "../toast/Toast";
+import { json } from "react-router-dom";
 
 var regex =
   /(?:https?):\/\/(\w+:?\w*)?(\S+)(:\d+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/;
@@ -22,6 +23,7 @@ export default function Home() {
   const { jwtToken } = useContext(LoginContext);
   const [isUpdated, setIsUpdated] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [isEmailVerified, setIsEmailVerified] = useState(false);
 
   const onEdit = () => {
     setIsEditing(true);
@@ -110,7 +112,6 @@ export default function Home() {
   };
 
   useState(() => {
-    setIsUpdated(true);
     fetch(
       "https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyCJx5BaRP2wpkK7EusD5XYqdvO-F3eTyQs",
       {
@@ -123,12 +124,58 @@ export default function Home() {
     )
       .then((response) => response.json())
       .then((data) => {
-        setEnteredName(data.users[0].displayName);
-        setEnteredPhotoUrl(data.users[0].photoUrl);
+        setIsEmailVerified(data.users[0].emailVerified);
+        if (
+          data.users[0].displayName.length ||
+          data.users[0].photoUrl.length > 0
+        ) {
+          setIsUpdated(true);
+
+          setEnteredName(data.users[0].displayName);
+          setEnteredPhotoUrl(data.users[0].photoUrl);
+        }
       });
   }, []);
+
+  const verifyEmailPayload = {
+    requestType: "VERIFY_EMAIL",
+    idToken: jwtToken,
+  };
+  const verifyEmailAddress = () => {
+    fetch(
+      "https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyCJx5BaRP2wpkK7EusD5XYqdvO-F3eTyQs",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(verifyEmailPayload),
+      }
+    );
+  };
+
   return (
     <>
+      {!isEmailVerified && (
+        <div
+          class="mx-auto"
+          style={{ textAlign: "center", paddingTop: "3rem" }}
+        >
+          <span class="border border-primary p-3 ">
+            Your email is not verified.{" "}
+            <span
+              style={{
+                color: "blue",
+                cursor: "pointer",
+                textDecoration: "underline",
+              }}
+              onClick={() => verifyEmailAddress()}
+            >
+              Verify it now!
+            </span>
+          </span>
+        </div>
+      )}
       {!isUpdated && (
         <div
           class="mx-auto"
