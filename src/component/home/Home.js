@@ -7,6 +7,7 @@ import "./home.css";
 import Loader from "../loader/Loader";
 import axios from "axios";
 import { LoginContext } from "../context/loginContext";
+import Toast from "../toast/Toast";
 
 var regex =
   /(?:https?):\/\/(\w+:?\w*)?(\S+)(:\d+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/;
@@ -19,6 +20,13 @@ export default function Home() {
     useContext(ToasterContext);
   const [submitVisible, setSubmitVisible] = useState(true);
   const { jwtToken } = useContext(LoginContext);
+  const [isUpdated, setIsUpdated] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+
+  const onEdit = () => {
+    setIsEditing(true);
+  };
+
   const completeProfileHandler = () => {
     setIsModal(true);
   };
@@ -29,6 +37,7 @@ export default function Home() {
     inputChangeHandler: nameChageHandler,
     onBlurHandler: nameBlurHandler,
     reset: nameReset,
+    setEnteredValue: setEnteredName,
   } = useFormValidator(nameValidator);
 
   const {
@@ -38,6 +47,7 @@ export default function Home() {
     inputChangeHandler: photoUrlChangeHandler,
     onBlurHandler: photoBlurHandler,
     reset: photoUrlReset,
+    setEnteredValue: setEnteredPhotoUrl,
   } = useFormValidator(photourlValidator);
 
   let formIsValid = false;
@@ -45,17 +55,15 @@ export default function Home() {
     formIsValid = true;
   }
   const formValue = {
+    idToken: jwtToken,
     displayName: enteredName,
     photoUrl: enteredPhotoUrl,
     returnSecureToken: true,
-    idToken: jwtToken,
   };
 
-  console.log(formValue);
   const onSubmitHandler = (event) => {
     setSubmitVisible(false);
     setLoader(true);
-    event.preventDefault();
     event.preventDefault();
     if (formIsValid) {
       fetch(
@@ -67,39 +75,27 @@ export default function Home() {
             "Content-Type": "application/json",
           },
         }
-      )
-        .then((res) => {
+      ).then((response) => {
+        if (response.ok) {
+          setIsUpdated(true);
+          setIsModal(false);
           setLoader(false);
+          setSubmitVisible(true);
           setIsToaster(true);
-          if (res.ok) {
-            setIsMessage({
-              message: "Your profile is successfully updated",
-              type: "success",
-            });
-            setIsToaster(true);
-            nameReset();
-            photoUrlReset();
-            setIsModal(false);
-            submitVisible(true);
-          } else {
-            setIsMessage({
-              message: "something went wrong. Please try again later",
-              type: "danger",
-            });
-            setLoader(false);
-            setIsToaster(true);
-            submitVisible(true);
-          }
-        })
-        .catch((error) => {
+          setIsEditing(false);
           setIsMessage({
-            message: "something went wrong. Please try again later",
+            message: "your profile is successfully update",
+            type: "success",
+          });
+          response.json().then((data) => console.log(data));
+        } else {
+          setIsToaster(true);
+          setIsMessage({
+            message: "Something went wrong. Please try again later",
             type: "danger",
           });
-          setLoader(false);
-          setIsToaster(true);
-          submitVisible(true);
-        });
+        }
+      });
     } else {
       setSubmitVisible(true);
       setLoader(false);
@@ -108,66 +104,103 @@ export default function Home() {
       photoBlurHandler();
     }
   };
+
+  const getData = {
+    idToken: jwtToken,
+  };
+
+  useState(() => {
+    setIsUpdated(true);
+    fetch(
+      "https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyCJx5BaRP2wpkK7EusD5XYqdvO-F3eTyQs",
+      {
+        method: "POST",
+        body: JSON.stringify({ idToken: jwtToken }),
+        heders: {
+          "Content-Type": "application/json",
+        },
+      }
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        setEnteredName(data.users[0].displayName);
+        setEnteredPhotoUrl(data.users[0].photoUrl);
+      });
+  }, []);
   return (
     <>
-      <div class="mx-auto" style={{ textAlign: "center", paddingTop: "3rem" }}>
-        <span class="border border-primary p-3">
-          Your profile is incomplete!{" "}
-          <span
-            style={{
-              color: "blue",
-              cursor: "pointer",
-              textDecoration: "underline",
-            }}
-            onClick={completeProfileHandler}
-          >
-            Complete it now
+      {!isUpdated && (
+        <div
+          class="mx-auto"
+          style={{ textAlign: "center", paddingTop: "3rem" }}
+        >
+          <span class="border border-primary p-3">
+            Your profile is incomplete!{" "}
+            <span
+              style={{
+                color: "blue",
+                cursor: "pointer",
+                textDecoration: "underline",
+              }}
+              onClick={completeProfileHandler}
+            >
+              Complete it now
+            </span>
           </span>
-        </span>
-      </div>
-      {isModal && (
-        <Modal title="Update Profile">
+        </div>
+      )}
+      {isToaster && <Toast message={isMessage.message} type={isMessage.type} />}
+      {(isModal || isUpdated) && (
+        <Modal
+          title={isUpdated ? "Edit Profile" : "Update Profile"}
+          isUpdated={isUpdated}
+          isEditing={() => {
+            onEdit();
+          }}
+        >
           <form onSubmit={onSubmitHandler}>
-            <div className="mb-3">
-              <label htmlFor="name" className="form-label">
-                Full Name
-              </label>
-              <input
-                type="text"
-                className="form-control"
-                id="name"
-                aria-describedby="nameHelp"
-                value={enteredName}
-                onChange={nameChageHandler}
-                onBlur={nameBlurHandler}
-              />
-              <div id="update-error" className="form-text">
-                {enteredNameHasError && "Please enter a valid name"}
+            <fieldset disabled={isEditing || !isUpdated ? "" : "disabled"}>
+              <div className="mb-3">
+                <label htmlFor="name" className="form-label">
+                  Full Name
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="name"
+                  aria-describedby="nameHelp"
+                  value={enteredName}
+                  onChange={nameChageHandler}
+                  onBlur={nameBlurHandler}
+                />
+                <div id="update-error" className="form-text">
+                  {enteredNameHasError && "Please enter a valid name"}
+                </div>
               </div>
-            </div>
-            <div className="mb-3">
-              <label htmlFor="pfurl" className="form-label">
-                Profile Photo URL
-              </label>
-              <input
-                type="text"
-                className="form-control"
-                id="pfurl"
-                value={enteredPhotoUrl}
-                onChange={photoUrlChangeHandler}
-                onBlur={photoBlurHandler}
-              />
-              <div id="update-error" className="form-text">
-                {enteredPhotoInputHasError && "Please enter a valid url"}
+              <div className="mb-3">
+                <label htmlFor="pfurl" className="form-label">
+                  Profile Photo URL
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="pfurl"
+                  value={enteredPhotoUrl}
+                  onChange={photoUrlChangeHandler}
+                  onBlur={photoBlurHandler}
+                />
+                <div id="update-error" className="form-text">
+                  {enteredPhotoInputHasError && "Please enter a valid url"}
+                </div>
               </div>
-            </div>
 
-            {submitVisible && (
-              <button type="submit" className="btn btn-primary">
-                Submit
-              </button>
-            )}
-            {loader && <Loader />}
+              {submitVisible && (
+                <button type="submit" className="btn btn-primary">
+                  Submit
+                </button>
+              )}
+              {loader && <Loader />}
+            </fieldset>
           </form>
         </Modal>
       )}

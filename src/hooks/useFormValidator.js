@@ -28,5 +28,6 @@ export default function useFormValidator(valueIsValid) {
     onBlurHandler,
     setEnteredValue,
     reset,
+    setEnteredValue,
   };
 }
