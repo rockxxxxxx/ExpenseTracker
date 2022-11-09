@@ -1,9 +1,18 @@
-import React from "react";
+import React, { useContext } from "react";
 import { NavLink, Outlet, Link } from "react-router-dom";
+import { LoginContext } from "../component/context/loginContext";
 import Wave from "../component/wave/Wave";
 import "./navigation.css";
 
 export default function Navigation() {
+  const { isLoggedIn, setUserEmail, setJwtToken, setIsLoggedIn } =
+    useContext(LoginContext);
+  const logout = () => {
+    setJwtToken("");
+    setUserEmail("");
+    localStorage.clear();
+    setIsLoggedIn(false);
+  };
   return (
     <>
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -39,6 +48,13 @@ export default function Navigation() {
                   About Us
                 </NavLink>
               </li>
+              {isLoggedIn && (
+                <li class="nav-item" onClick={() => logout()}>
+                  <NavLink className="nav-link " to="/signup">
+                    Logout
+                  </NavLink>
+                </li>
+              )}
             </div>
           </div>
         </div>

@@ -124,7 +124,6 @@ export default function Home() {
     )
       .then((response) => response.json())
       .then((data) => {
-        setIsEmailVerified(data.users[0].emailVerified);
         if (
           data.users[0].displayName.length ||
           data.users[0].photoUrl.length > 0
@@ -134,6 +133,7 @@ export default function Home() {
           setEnteredName(data.users[0].displayName);
           setEnteredPhotoUrl(data.users[0].photoUrl);
         }
+        setIsEmailVerified(data.users[0].emailVerified);
       });
   }, []);
 
