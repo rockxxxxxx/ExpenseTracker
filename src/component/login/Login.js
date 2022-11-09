@@ -7,6 +7,7 @@ import { ToasterContext } from "../context/toasterContext";
 import Loader from "../loader/Loader";
 import Toast from "../toast/Toast";
 import "./login.css";
+import ForgotPassword from "../forgotPassword/ForgotPassword";
 
 const emailValidator = (value) => value.includes("@");
 const passwordValidator = (value) => value.length > 6;
@@ -19,6 +20,7 @@ export default function Login() {
   const { isMessage, setIsMessage, isToaster, setIsToaster } =
     useContext(ToasterContext);
   const [submitVisible, setSubmitVisible] = useState(true);
+  const [isResetPassword, setIsResetpassword] = useState(false);
   const {
     value: enteredEmail,
     isValid: emailIsValid,
@@ -101,57 +103,81 @@ export default function Login() {
 
   return (
     <>
-      <div className="container login">
-        <Card title="Login">
-          <form onSubmit={onSubmitHandler}>
-            <div className="mb-3">
-              <label htmlFor="email" className="form-label">
-                Email address
-              </label>
-              <input
-                type="email"
-                className="form-control"
-                id="email"
-                aria-describedby="emailHelp"
-                value={enteredEmail}
-                onChange={emailChangeHandler}
-                onBlur={emailBlurHandler}
-              />
-              <div id="login-error" className="form-text">
-                {emailInputHasError && "Please enter a valid email address"}
-              </div>
-            </div>
-            <div className="mb-3">
-              <label htmlFor="password" className="form-label">
-                Password
-              </label>
-              <input
-                type="password"
-                className="form-control"
-                id="password"
-                value={enteredPaasword}
-                onChange={passwordChangeHandler}
-                onBlur={passwordBlurHandler}
-              />
-            </div>
+      {!isResetPassword && (
+        <>
+          <div className="container login">
+            <Card title="Login">
+              <form onSubmit={onSubmitHandler}>
+                <div className="mb-3">
+                  <label htmlFor="email" className="form-label">
+                    Email address
+                  </label>
+                  <input
+                    type="email"
+                    className="form-control"
+                    id="email"
+                    aria-describedby="emailHelp"
+                    value={enteredEmail}
+                    onChange={emailChangeHandler}
+                    onBlur={emailBlurHandler}
+                  />
+                  <div id="login-error" className="form-text">
+                    {emailInputHasError && "Please enter a valid email address"}
+                  </div>
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="password" className="form-label">
+                    Password
+                  </label>
+                  <input
+                    type="password"
+                    className="form-control"
+                    id="password"
+                    value={enteredPaasword}
+                    onChange={passwordChangeHandler}
+                    onBlur={passwordBlurHandler}
+                  />
+                </div>
 
-            {submitVisible && (
-              <button type="submit" className="btn btn-primary">
-                Submit
-              </button>
+                {submitVisible && (
+                  <button type="submit" className="btn btn-primary">
+                    Submit
+                  </button>
+                )}
+                {loader && <Loader />}
+              </form>
+            </Card>
+            {isToaster && (
+              <Toast message={isMessage.message} type={isMessage.type} />
             )}
-            {loader && <Loader />}
-          </form>
-        </Card>
-        {isToaster && (
-          <Toast message={isMessage.message} type={isMessage.type} />
-        )}
-      </div>
-      <div class="mx-auto" style={{ textAlign: "center", paddingTop: "3rem" }}>
-        <span class="border border-primary p-3">
-          Don't have an account? <NavLink to="/signup">Signup</NavLink>
-        </span>
-      </div>
+          </div>
+          <div
+            class="mx-auto"
+            style={{ textAlign: "center", paddingTop: "3rem" }}
+          >
+            <span class="border border-primary p-3">
+              Don't have an account? <NavLink to="/signup">Signup</NavLink>
+            </span>
+            <span class="border border-primary p-3">
+              Frogot Password??{" "}
+              <span
+                style={{
+                  color: "blue",
+                  cursor: "pointer",
+                  textDecoration: "underline",
+                }}
+                onClick={() => setIsResetpassword(true)}
+              >
+                Click here
+              </span>{" "}
+              to reset!
+            </span>
+          </div>
+        </>
+      )}
+      {isResetPassword && (
+        <ForgotPassword reset={() => setIsResetpassword(false)} />
+      )}
     </>
   );
 }
