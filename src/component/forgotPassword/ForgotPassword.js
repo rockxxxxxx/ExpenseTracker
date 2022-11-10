@@ -1,8 +1,8 @@
 import React, { useContext, useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+
 import useFormValidator from "../../hooks/useFormValidator";
 import Card from "../cards/Card";
-import { LoginContext } from "../context/loginContext";
+
 import { ToasterContext } from "../context/toasterContext";
 import Loader from "../loader/Loader";
 import Toast from "../toast/Toast";
@@ -115,8 +115,11 @@ export default function ForgotPassword({ reset }) {
           <Toast message={isMessage.message} type={isMessage.type} />
         )}
       </div>
-      <div class="mx-auto" style={{ textAlign: "center", paddingTop: "3rem" }}>
-        <span class="border border-primary p-3">
+      <div
+        className="mx-auto"
+        style={{ textAlign: "center", paddingTop: "3rem" }}
+      >
+        <span className="border border-primary p-3">
           <span
             style={{
               color: "blue",

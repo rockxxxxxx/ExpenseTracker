@@ -1,14 +1,12 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import useFormValidator from "../../hooks/useFormValidator";
 import { ModalContext } from "../context/modalContext";
 import { ToasterContext } from "../context/toasterContext";
 import Modal from "../modal/Modal";
 import "./home.css";
 import Loader from "../loader/Loader";
-import axios from "axios";
 import { LoginContext } from "../context/loginContext";
 import Toast from "../toast/Toast";
-import { json } from "react-router-dom";
 
 var regex =
   /(?:https?):\/\/(\w+:?\w*)?(\S+)(:\d+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/;
@@ -38,7 +36,6 @@ export default function Home() {
     hasError: enteredNameHasError,
     inputChangeHandler: nameChageHandler,
     onBlurHandler: nameBlurHandler,
-    reset: nameReset,
     setEnteredValue: setEnteredName,
   } = useFormValidator(nameValidator);
 
@@ -48,7 +45,6 @@ export default function Home() {
     hasError: enteredPhotoInputHasError,
     inputChangeHandler: photoUrlChangeHandler,
     onBlurHandler: photoBlurHandler,
-    reset: photoUrlReset,
     setEnteredValue: setEnteredPhotoUrl,
   } = useFormValidator(photourlValidator);
 
@@ -107,11 +103,7 @@ export default function Home() {
     }
   };
 
-  const getData = {
-    idToken: jwtToken,
-  };
-
-  useState(() => {
+  useEffect(() => {
     fetch(
       "https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyCJx5BaRP2wpkK7EusD5XYqdvO-F3eTyQs",
       {
@@ -135,7 +127,7 @@ export default function Home() {
         }
         setIsEmailVerified(data.users[0].emailVerified);
       });
-  }, []);
+  }, [jwtToken, setEnteredName, setEnteredPhotoUrl]);
 
   const verifyEmailPayload = {
     requestType: "VERIFY_EMAIL",
@@ -153,15 +145,16 @@ export default function Home() {
       }
     );
   };
+  console.log(isModal);
 
   return (
     <>
       {!isEmailVerified && (
         <div
-          class="mx-auto"
+          className="mx-auto"
           style={{ textAlign: "center", paddingTop: "3rem" }}
         >
-          <span class="border border-primary p-3 ">
+          <span className="border border-primary p-3 ">
             Your email is not verified.{" "}
             <span
               style={{
@@ -178,10 +171,10 @@ export default function Home() {
       )}
       {!isUpdated && (
         <div
-          class="mx-auto"
+          className="mx-auto"
           style={{ textAlign: "center", paddingTop: "3rem" }}
         >
-          <span class="border border-primary p-3">
+          <span className="border border-primary p-3">
             Your profile is incomplete!{" "}
             <span
               style={{
@@ -249,6 +242,7 @@ export default function Home() {
               {loader && <Loader />}
             </fieldset>
           </form>
+          <img src={enteredPhotoUrl} />
         </Modal>
       )}
     </>

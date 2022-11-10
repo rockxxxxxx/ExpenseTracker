@@ -1,11 +1,18 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { ToasterContext } from "../context/toasterContext";
 
 export default function Toast({ message, type }) {
-  const { setIsToaster } = useContext(ToasterContext);
+  const { setIsToaster, isToaster } = useContext(ToasterContext);
   const onToasterClose = () => {
     setIsToaster(false);
   };
+  useEffect(() => {
+    if (isToaster) {
+      setInterval(() => {
+        setIsToaster(false);
+      }, 5000);
+    }
+  }, [isToaster, setIsToaster]);
   return (
     <div
       className={`toast show align-items-center text-white bg-${type} border-0 position-absolute top-50 end-0`}

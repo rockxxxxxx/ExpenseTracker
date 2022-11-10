@@ -14,8 +14,7 @@ const passwordValidator = (value) => value.length > 6;
 
 export default function Login() {
   const navigate = useNavigate();
-  const { setIsLoggedIn, setJwtToken, setUserEmail, jwtToken } =
-    useContext(LoginContext);
+  const { setIsLoggedIn, setJwtToken, setUserEmail } = useContext(LoginContext);
   const [loader, setLoader] = useState(false);
   const { isMessage, setIsMessage, isToaster, setIsToaster } =
     useContext(ToasterContext);
@@ -33,7 +32,6 @@ export default function Login() {
   const {
     value: enteredPaasword,
     isValid: passwordIsValid,
-    hasError: passwordInputHasError,
     inputChangeHandler: passwordChangeHandler,
     onBlurHandler: passwordBlurHandler,
     reset: passwordReset,
@@ -72,6 +70,7 @@ export default function Login() {
               message: "You have successfully Logged in",
               type: "success",
             });
+            setIsLoggedIn(true);
             setIsToaster(true);
             emailReset();
             passwordReset();
@@ -152,13 +151,13 @@ export default function Login() {
             )}
           </div>
           <div
-            class="mx-auto"
+            className="mx-auto"
             style={{ textAlign: "center", paddingTop: "3rem" }}
           >
-            <span class="border border-primary p-3">
+            <span className="border border-primary p-3">
               Don't have an account? <NavLink to="/signup">Signup</NavLink>
             </span>
-            <span class="border border-primary p-3">
+            <span className="border border-primary p-3">
               Frogot Password??{" "}
               <span
                 style={{

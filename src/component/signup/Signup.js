@@ -177,8 +177,11 @@ export default function Signup() {
           <Toast message={isMessage.message} type={isMessage.type} />
         )}
       </div>
-      <div class="mx-auto" style={{ textAlign: "center", paddingTop: "3rem" }}>
-        <span class="border border-primary p-3">
+      <div
+        className="mx-auto"
+        style={{ textAlign: "center", paddingTop: "3rem" }}
+      >
+        <span className="border border-primary p-3">
           Already have an account? <NavLink to="/login">Login</NavLink>
         </span>
       </div>

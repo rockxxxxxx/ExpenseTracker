@@ -12,7 +12,7 @@ export default function Modal({ children, title, isUpdated, isEditing }) {
   };
   return (
     <>
-      {isModal && (
+      {(isModal || isUpdated) && (
         <div className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
