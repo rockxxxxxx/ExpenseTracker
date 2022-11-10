@@ -10,17 +10,15 @@ import { LoginProvider } from "./component/context/loginContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
-    <BrowserRouter>
-      <LoginProvider>
-        <ModalContextProvider>
-          <ToasterContextProvider>
-            <App />
-          </ToasterContextProvider>
-        </ModalContextProvider>
-      </LoginProvider>
-    </BrowserRouter>
-  </React.StrictMode>
+  <BrowserRouter>
+    <LoginProvider>
+      <ModalContextProvider>
+        <ToasterContextProvider>
+          <App />
+        </ToasterContextProvider>
+      </ModalContextProvider>
+    </LoginProvider>
+  </BrowserRouter>
 );
 
 // If you want to start measuring performance in your app, pass a function

@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Card from "../cards/Card";
+import { LoginContext } from "../context/loginContext";
 import "./expense.css";
 import ExpenseData from "./ExpenseData";
 
@@ -14,16 +15,63 @@ const addExpenses = (getExpense, am, desc, type) => {
   ];
 };
 
+let loadedData = [];
+function pushData(data) {
+  for (const key in data) {
+    loadedData.push({
+      amount: data[key].amount,
+      description: data[key].description,
+      type: data[key].type,
+    });
+  }
+}
+
 export default function Expenses() {
+  const { userEmail } = useContext(LoginContext);
   const [getExpense, setGetExpense] = useState([]);
   const [amount, setAmount] = useState("");
   const [description, setDescription] = useState("");
-  const [type, setType] = useState("Please select");
+  const [type, setType] = useState("Please Select");
 
   const onSubmithandler = (event) => {
+    const data = {
+      amount,
+      description,
+      type,
+    };
     event.preventDefault();
-    setGetExpense(addExpenses(getExpense, amount, description, type));
+
+    fetch(
+      `https://expnse-tracker-default-rtdb.firebaseio.com/${userEmail
+        .split(".")
+        .join("")}.json`,
+      {
+        method: "POST",
+        body: JSON.stringify(data),
+      }
+    ).then((response) => {
+      if (response.ok) {
+        setGetExpense(addExpenses(getExpense, amount, description, type));
+      } else {
+        console.log("something went wrong");
+      }
+    });
   };
+
+  useEffect(() => {
+    loadedData = [];
+    fetch(
+      `https://expnse-tracker-default-rtdb.firebaseio.com/${userEmail
+        .split(".")
+        .join("")}.json`
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        pushData(data);
+        setGetExpense(loadedData);
+        console.log(getExpense);
+      });
+  }, [userEmail]);
 
   return (
     <>
