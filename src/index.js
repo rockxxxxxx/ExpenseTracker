@@ -7,6 +7,7 @@ import { ToasterContextProvider } from "./component/context/toasterContext";
 import { BrowserRouter } from "react-router-dom";
 import { ModalContextProvider } from "./component/context/modalContext";
 import { LoginProvider } from "./component/context/loginContext";
+import { ExpenseDataProvider } from "./component/context/expenseDataContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -14,7 +15,9 @@ root.render(
     <LoginProvider>
       <ModalContextProvider>
         <ToasterContextProvider>
-          <App />
+          <ExpenseDataProvider>
+            <App />
+          </ExpenseDataProvider>
         </ToasterContextProvider>
       </ModalContextProvider>
     </LoginProvider>
