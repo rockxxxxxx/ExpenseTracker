@@ -242,7 +242,8 @@ export default function Home() {
               {loader && <Loader />}
             </fieldset>
           </form>
-          <img src={enteredPhotoUrl} />
+          <br />
+          <img src={enteredPhotoUrl} alt="image" width="450px" height="200px" />
         </Modal>
       )}
     </>
