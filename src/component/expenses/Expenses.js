@@ -1,83 +1,34 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import Card from "../cards/Card";
 import { ExpenseDataContext } from "../context/expenseDataContext";
 import { LoginContext } from "../context/loginContext";
+import { ToasterContext } from "../context/toasterContext";
+import Toast from "../toast/Toast";
 import "./expense.css";
 import ExpenseData from "./ExpenseData";
 
-const addExpenses = (getExpense, am, desc, type, id) => {
-  return [
-    ...getExpense,
-    {
-      id: id,
-      amount: am,
-      description: desc,
-      type: type,
-    },
-  ];
-};
-
-let loadedData = [];
-function pushData(data) {
-  for (const key in data) {
-    loadedData.push({
-      id: key,
-      amount: data[key].amount,
-      description: data[key].description,
-      type: data[key].type,
-    });
-  }
-}
-
 export default function Expenses() {
   const { userEmail } = useContext(LoginContext);
-  const { getExpense, setGetExpense } = useContext(ExpenseDataContext);
-  const [amount, setAmount] = useState("");
-  const [description, setDescription] = useState("");
-  const [type, setType] = useState("Please Select");
+  const { isToaster, isMessage } = useContext(ToasterContext);
+  const {
+    getExpense,
+    amount,
+    setAmount,
+    description,
+    setDescription,
+    type,
+    setType,
+    addExpense,
+    onRefreshDataLoad,
+  } = useContext(ExpenseDataContext);
 
   const onSubmithandler = (event) => {
-    const data = {
-      amount,
-      description,
-      type,
-    };
     event.preventDefault();
-
-    fetch(
-      `https://expnse-tracker-default-rtdb.firebaseio.com/${userEmail
-        .split(".")
-        .join("")}.json`,
-      {
-        method: "POST",
-        body: JSON.stringify(data),
-      }
-    ).then((response) => {
-      if (response.ok) {
-        response.json().then((data) => {
-          console.log(data.name);
-          setGetExpense(
-            addExpenses(getExpense, amount, description, type, data.name)
-          );
-        });
-      } else {
-        console.log("something went wrong");
-      }
-    });
+    addExpense();
   };
 
   useEffect(() => {
-    loadedData = [];
-    fetch(
-      `https://expnse-tracker-default-rtdb.firebaseio.com/${userEmail
-        .split(".")
-        .join("")}.json`
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        pushData(data);
-        setGetExpense(loadedData);
-      });
+    onRefreshDataLoad();
   }, [userEmail]);
 
   return (
@@ -186,6 +137,7 @@ export default function Expenses() {
           </table>
         </Card>
       </div>
+      {isToaster && <Toast message={isMessage.message} type={isMessage.type} />}
     </>
   );
 }

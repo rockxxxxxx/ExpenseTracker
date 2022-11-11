@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 export default function useFormValidator(valueIsValid) {
   const [enteredValue, setEnteredValue] = useState("");
@@ -28,6 +28,5 @@ export default function useFormValidator(valueIsValid) {
     onBlurHandler,
     setEnteredValue,
     reset,
-    setEnteredValue,
   };
 }

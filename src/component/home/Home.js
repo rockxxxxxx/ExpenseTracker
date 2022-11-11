@@ -243,7 +243,12 @@ export default function Home() {
             </fieldset>
           </form>
           <br />
-          <img src={enteredPhotoUrl} alt="image" width="450px" height="200px" />
+          <img
+            src={enteredPhotoUrl}
+            alt={enteredName}
+            width="450px"
+            height="200px"
+          />
         </Modal>
       )}
     </>
