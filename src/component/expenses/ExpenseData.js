@@ -5,6 +5,8 @@ import Modal from "react-bootstrap/Modal";
 import { LoginContext } from "../context/loginContext";
 import { ToasterContext } from "../context/toasterContext";
 import Toast from "../toast/Toast";
+import del from "../../delete.png";
+import edit from "../../edit.png";
 
 export default function ExpenseData({
   amount,
@@ -67,9 +69,14 @@ export default function ExpenseData({
         <td>{description}</td>
         <td>{type}</td>
         <td>
-          <span onClick={() => EditExpense(id)}>Edit </span>
+          <span onClick={() => EditExpense(id)} style={{ cursor: "pointer" }}>
+            <img src={edit} alt="Edit" />{" "}
+          </span>
           &nbsp;&nbsp;&nbsp;&nbsp;
-          <span onClick={() => DeleteExpense(id)}> Delete</span>
+          <span onClick={() => DeleteExpense(id)} style={{ cursor: "pointer" }}>
+            {" "}
+            <img src={del} alt="Delete" />{" "}
+          </span>
         </td>
       </tr>
       <Modal

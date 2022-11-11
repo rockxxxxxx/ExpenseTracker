@@ -5,12 +5,12 @@ import Navigation from "./router/Navigation";
 import { Route, Routes, Navigate } from "react-router-dom";
 
 import { useContext } from "react";
-import Login from "./component/login/Login";
-import Home from "./component/home/Home";
 import { LoginContext } from "./component/context/loginContext";
-import Expenses from "./component/expenses/Expenses";
 
 const SignUp = React.lazy(() => import("./component/signup/Signup"));
+const Login = React.lazy(() => import("./component/login/Login"));
+const Home = React.lazy(() => import("./component/home/Home"));
+const Expenses = React.lazy(() => import("./component/expenses/Expenses"));
 
 var hours = 0.03; // to clear the localStorage after 1 hour
 // (if someone want to clear after 8hrs simply change hours=8)

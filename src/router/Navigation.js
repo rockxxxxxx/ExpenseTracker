@@ -3,6 +3,13 @@ import { NavLink, Outlet } from "react-router-dom";
 import { LoginContext } from "../component/context/loginContext";
 import Wave from "../component/wave/Wave";
 import "./navigation.css";
+import logo from "../logo.png";
+import home from "../home.png";
+import exp from "../expenses.png";
+import prod from "../product.png";
+import logout from "../logout.png";
+import signup from "../signup.png";
+import about from "../about.png";
 
 export default function Navigation() {
   const { isLoggedIn, setUserEmail, setJwtToken, setIsLoggedIn } =
@@ -21,7 +28,7 @@ export default function Navigation() {
         <div className="container-fluid">
           <NavLink className="navbar-brand nav-link" to="">
             <img
-              src="/docs/5.0/assets/brand/bootstrap-logo.svg"
+              src={logo}
               alt=""
               width="30"
               height="24"
@@ -49,6 +56,7 @@ export default function Navigation() {
                   }
                   to="/home"
                 >
+                  <img src={home} alt="home" />
                   Home
                 </NavLink>
               </li>
@@ -59,7 +67,7 @@ export default function Navigation() {
                   }
                   to="/expenses"
                 >
-                  Expenses
+                  <img src={exp} alt="Expenses" /> Expenses
                 </NavLink>
               </li>
               <li className="nav-item">
@@ -69,7 +77,7 @@ export default function Navigation() {
                   }
                   to="/product"
                 >
-                  Product
+                  <img src={prod} alt="Product" /> Product
                 </NavLink>
               </li>
               {!isLoggedIn && (
@@ -80,12 +88,13 @@ export default function Navigation() {
                     }
                     to="/signup"
                   >
-                    Signup
+                    <img src={signup} alt="Sign Up" /> Signup
                   </NavLink>
                 </li>
               )}
               <li className="nav-item">
                 <NavLink className="nav-link " to="/aboutus">
+                  <img src={about} alt="About Us" />
                   About Us
                 </NavLink>
               </li>
