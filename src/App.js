@@ -6,6 +6,7 @@ import { Route, Routes, Navigate } from "react-router-dom";
 
 import { useContext } from "react";
 import { LoginContext } from "./component/context/loginContext";
+import { useSelector } from "react-redux";
 
 const SignUp = React.lazy(() => import("./component/signup/Signup"));
 const Login = React.lazy(() => import("./component/login/Login"));
@@ -26,7 +27,7 @@ if (setupTime == null) {
 }
 
 function App() {
-  const { isLoggedIn } = useContext(LoginContext);
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   return (
     <div className="App">
       <Suspense

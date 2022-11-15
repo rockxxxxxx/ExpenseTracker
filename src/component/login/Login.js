@@ -8,6 +8,8 @@ import Loader from "../loader/Loader";
 import Toast from "../toast/Toast";
 import "./login.css";
 import ForgotPassword from "../forgotPassword/ForgotPassword";
+import { useSelector, useDispatch } from "react-redux";
+import { login } from "../../reducers/authReducr";
 
 const emailValidator = (value) => value.includes("@");
 const passwordValidator = (value) => value.length > 6;
@@ -20,6 +22,7 @@ export default function Login() {
     useContext(ToasterContext);
   const [submitVisible, setSubmitVisible] = useState(true);
   const [isResetPassword, setIsResetpassword] = useState(false);
+  const dispatch = useDispatch();
   const {
     value: enteredEmail,
     isValid: emailIsValid,
@@ -70,7 +73,6 @@ export default function Login() {
               message: "You have successfully Logged in",
               type: "success",
             });
-            setIsLoggedIn(true);
             setIsToaster(true);
             emailReset();
             passwordReset();
@@ -87,8 +89,15 @@ export default function Login() {
           }
         })
         .then((data) => {
-          setJwtToken(data.idToken);
-          setUserEmail(data.email);
+          dispatch(
+            login({
+              isLoggedIn: true,
+              jwtToken: data.idToken,
+              userEmail: data.email,
+            })
+          );
+          //setJwtToken(data.idToken);
+          //setUserEmail(data.email);
           localStorage.setItem("auth_token", data.idToken);
           localStorage.setItem("email", data.email);
         });
@@ -99,6 +108,8 @@ export default function Login() {
       passwordBlurHandler();
     }
   }
+  const updateCount = useSelector((state) => state.auth);
+  console.log(updateCount);
 
   return (
     <>

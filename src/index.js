@@ -8,20 +8,24 @@ import { BrowserRouter } from "react-router-dom";
 import { ModalContextProvider } from "./component/context/modalContext";
 import { LoginProvider } from "./component/context/loginContext";
 import { ExpenseDataProvider } from "./component/context/expenseDataContext";
+import { Provider } from "react-redux";
+import { store } from "./reducers/authReducr";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <BrowserRouter>
-    <LoginProvider>
-      <ModalContextProvider>
-        <ToasterContextProvider>
-          <ExpenseDataProvider>
-            <App />
-          </ExpenseDataProvider>
-        </ToasterContextProvider>
-      </ModalContextProvider>
-    </LoginProvider>
-  </BrowserRouter>
+  <Provider store={store}>
+    <BrowserRouter>
+      <LoginProvider>
+        <ModalContextProvider>
+          <ToasterContextProvider>
+            <ExpenseDataProvider>
+              <App />
+            </ExpenseDataProvider>
+          </ToasterContextProvider>
+        </ModalContextProvider>
+      </LoginProvider>
+    </BrowserRouter>
+  </Provider>
 );
 
 // If you want to start measuring performance in your app, pass a function

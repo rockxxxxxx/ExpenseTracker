@@ -7,6 +7,7 @@ import "./home.css";
 import Loader from "../loader/Loader";
 import { LoginContext } from "../context/loginContext";
 import Toast from "../toast/Toast";
+import { useSelector } from "react-redux";
 
 var regex =
   /(?:https?):\/\/(\w+:?\w*)?(\S+)(:\d+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/;
@@ -18,10 +19,12 @@ export default function Home() {
   const { isMessage, setIsMessage, isToaster, setIsToaster } =
     useContext(ToasterContext);
   const [submitVisible, setSubmitVisible] = useState(true);
-  const { jwtToken } = useContext(LoginContext);
+  const jwtToken = useSelector((state) => state.auth.jwtToken);
   const [isUpdated, setIsUpdated] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [isEmailVerified, setIsEmailVerified] = useState(false);
+
+  console.log(jwtToken);
 
   const onEdit = () => {
     setIsEditing(true);

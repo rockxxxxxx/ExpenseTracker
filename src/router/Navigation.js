@@ -10,15 +10,15 @@ import prod from "../product.png";
 
 import signup from "../signup.png";
 import about from "../about.png";
+import { useSelector, useDispatch } from "react-redux";
+import { logoutD } from "../reducers/authReducr";
 
 export default function Navigation() {
-  const { isLoggedIn, setUserEmail, setJwtToken, setIsLoggedIn } =
-    useContext(LoginContext);
+  const state = useSelector((state) => state.auth);
+  const { isLoggedIn, setUserEmail, setJwtToken, setIsLoggedIn } = state;
+  const dispatch = useDispatch();
   const logout = () => {
-    setJwtToken("");
-    setUserEmail("");
-    localStorage.clear();
-    setIsLoggedIn(false);
+    dispatch(logoutD());
   };
   console.log(isLoggedIn);
 
