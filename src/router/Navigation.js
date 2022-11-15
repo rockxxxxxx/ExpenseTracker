@@ -7,7 +7,7 @@ import logo from "../logo.png";
 import home from "../home.png";
 import exp from "../expenses.png";
 import prod from "../product.png";
-import logout from "../logout.png";
+
 import signup from "../signup.png";
 import about from "../about.png";
 
