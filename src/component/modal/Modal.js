@@ -13,7 +13,10 @@ export default function Modal({ children, title, isUpdated, isEditing }) {
   return (
     <>
       {(isModal || isUpdated) && (
-        <div className="modal-dialog">
+        <div
+          className="modal-dialog"
+          style={{ width: "50%", margin: "auto", paddingBottom: "50px" }}
+        >
           <div className="modal-content">
             <div className="modal-header">
               <h5

@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import Card from "../cards/Card";
+import { CSVLink, CSVDownload } from "react-csv";
 
 import { ToasterContext } from "../context/toasterContext";
 import Toast from "../toast/Toast";
@@ -32,14 +33,22 @@ export default function Expenses() {
       description,
     };
     event.preventDefault();
-    if (expenseTotal + amount <= 10000) {
+    if (expenseTotal + parseInt(amount) <= 10000) {
       dispatch(postExpense(data));
     } else {
+      console.log(expenseTotal + amount);
       alert(
         "You need a premium service for adding more than a total expense of ₹10,000"
       );
     }
   };
+  const headers = [
+    { label: "Amount", key: "amount" },
+    { label: "Desctription", key: "description" },
+    { label: "Type", key: "type" },
+  ];
+
+  const data = getExpense;
 
   console.log(useSelector((state) => state));
 
@@ -47,11 +56,17 @@ export default function Expenses() {
     //onRefreshDataLoad();
     dispatch(fetchExpense(userEmail));
   }, [userEmail, dispatch]);
+  const premium = useSelector((state) => state.premium.permiumService);
 
   return (
     <>
       <div className="expenses">
         <Card title="Expenses">
+          {premium && (
+            <CSVLink data={data} headers={headers} filename="Expense">
+              Download Your Report
+            </CSVLink>
+          )}
           <form
             className="row row-cols-lg-auto g-3 align-items-center"
             onSubmit={onSubmithandler}

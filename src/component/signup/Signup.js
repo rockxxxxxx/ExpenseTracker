@@ -6,6 +6,7 @@ import { ToasterContext } from "../context/toasterContext";
 import Loader from "../loader/Loader";
 import Toast from "../toast/Toast";
 import "./signup.css";
+import { useSelector } from "react-redux";
 
 const emailValidator = (value) => value.includes("@");
 const passwordValidator = (value) => value.length > 6;
@@ -44,7 +45,7 @@ export default function Signup() {
     reset: confirmpasswordReset,
   } = useFormValidator(confirmPassValidator);
 
-  console.log(isMessage);
+  const themeDefault = useSelector((state) => state.theme.themeDefault);
 
   let formIsValid = false;
   if (emailIsValid && passwordIsValid && confirmpasswordIsValid && !loader) {

@@ -31,7 +31,7 @@ export default function ExpenseData({
       (total, expenseAmount) =>
         parseInt(total) + parseInt(expenseAmount.amount),
       0
-    ) - amount;
+    ) - parseInt(amount);
 
   const handleClose = () => setShow(false);
   const EditExpense = (id1) => {
@@ -51,7 +51,7 @@ export default function ExpenseData({
       description: editDescription,
       type: editType,
     };
-    if (expenseTotal + editAmount <= 10000) {
+    if (expenseTotal + parseInt(editAmount) <= 10000) {
       fetch(
         `https://expnse-tracker-default-rtdb.firebaseio.com/${userEmail
           .split(".")
@@ -72,7 +72,9 @@ export default function ExpenseData({
         }
       });
     } else {
-      alert("You need a premium service for adding more than a total expense of ₹10,000");
+      alert(
+        "You need a premium service for adding more than a total expense of ₹10,000"
+      );
     }
   };
 

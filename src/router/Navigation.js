@@ -11,20 +11,40 @@ import signup from "../signup.png";
 import about from "../about.png";
 import { useSelector, useDispatch } from "react-redux";
 import { logoutD } from "../reducers/authReducr";
+import { changeTheme } from "../reducers/themeReducer";
+import { activatePremium } from "../reducers/premiumServiceReducer";
 
 export default function Navigation() {
   const state = useSelector((state) => state.auth);
   const { isLoggedIn } = state;
+
   const dispatch = useDispatch();
   const logout = () => {
     dispatch(logoutD());
   };
-  console.log(isLoggedIn);
+
+  const getExpense = useSelector((state) => state.addExpenses.userExpense);
+  const premium = useSelector((state) => state.premium.permiumService);
+
+  console.log(premium);
+  const expenseTotal = getExpense.reduce(
+    (total, expenseAmount) => parseInt(total) + parseInt(expenseAmount.amount),
+    0
+  );
+  const themeToggler = () => {
+    dispatch(changeTheme(!themeDefault));
+    console.log(themeDefault);
+  };
+  const themeDefault = useSelector((state) => state.theme.themeDefault);
 
   return (
     <>
-      <nav className="navbar navbar-expand-lg navbar-light bg-light">
-        <div className="container-fluid">
+      <nav
+        class={`navbar navbar-expand-sm navbar-${
+          themeDefault === true ? "light" : "dark"
+        } bg-${themeDefault === true ? "light" : "dark"}`}
+      >
+        <div class="container-fluid">
           <NavLink className="navbar-brand nav-link" to="">
             <img
               src={logo}
@@ -36,19 +56,16 @@ export default function Navigation() {
             Expense Tracker
           </NavLink>
           <button
-            className="navbar-toggler"
+            class="navbar-toggler"
             type="button"
             data-bs-toggle="collapse"
-            data-bs-target="#navbarNavAltMarkup"
-            aria-controls="navbarNavAltMarkup"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
+            data-bs-target="#mynavbar"
           >
-            <span className="navbar-toggler-icon"></span>
+            <span class="navbar-toggler-icon"></span>
           </button>
-          <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
-            <div className="navbar-nav">
-              <li className="nav-item">
+          <div class="collapse navbar-collapse" id="mynavbar">
+            <ul class="navbar-nav me-auto">
+              <li class="nav-item">
                 <NavLink
                   className={({ isActive }) =>
                     isActive ? "active nav-link" : "nav-link"
@@ -59,7 +76,7 @@ export default function Navigation() {
                   Home
                 </NavLink>
               </li>
-              <li className="nav-item">
+              <li class="nav-item">
                 <NavLink
                   className={({ isActive }) =>
                     isActive ? "active nav-link" : "nav-link"
@@ -69,7 +86,7 @@ export default function Navigation() {
                   <img src={exp} alt="Expenses" /> Expenses
                 </NavLink>
               </li>
-              <li className="nav-item">
+              <li class="nav-item">
                 <NavLink
                   className={({ isActive }) =>
                     isActive ? "active nav-link" : "nav-link"
@@ -98,13 +115,44 @@ export default function Navigation() {
                 </NavLink>
               </li>
               {isLoggedIn && (
-                <li className="nav-item" onClick={() => logout()}>
+                <li className="nav-item " onClick={() => logout()}>
                   <NavLink className="nav-link " to="/signup">
                     Logout
                   </NavLink>
                 </li>
               )}
-            </div>
+              {isLoggedIn && expenseTotal >= 10000 && (
+                <li
+                  className="nav-item"
+                  onClick={() => {
+                    premium === true
+                      ? console.log("")
+                      : dispatch(activatePremium());
+                  }}
+                >
+                  <NavLink className="nav-link" disabled>
+                    {premium === true ? "Premium Member" : "Activate Premium "}
+                  </NavLink>
+                </li>
+              )}
+            </ul>
+            {premium && (
+              <div
+                style={{
+                  paddingReft: "0px",
+                  paddingLeft: "auto",
+                  color: themeDefault === true ? "black" : "white",
+                }}
+                class="custom-control custom-switch"
+              >
+                {`Toogle ${themeDefault === true ? "dark" : "light"} Mode`}
+                &nbsp;
+                <label class="switch">
+                  <input type="checkbox" onClick={themeToggler} />
+                  <span class="slider round"></span>
+                </label>
+              </div>
+            )}
           </div>
         </div>
       </nav>
