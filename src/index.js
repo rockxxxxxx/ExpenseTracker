@@ -9,7 +9,7 @@ import { ModalContextProvider } from "./component/context/modalContext";
 import { LoginProvider } from "./component/context/loginContext";
 import { ExpenseDataProvider } from "./component/context/expenseDataContext";
 import { Provider } from "react-redux";
-import { store } from "./reducers/authReducr";
+import { store } from "./reducers/store";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

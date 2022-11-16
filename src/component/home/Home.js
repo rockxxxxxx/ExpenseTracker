@@ -5,12 +5,10 @@ import { ToasterContext } from "../context/toasterContext";
 import Modal from "../modal/Modal";
 import "./home.css";
 import Loader from "../loader/Loader";
-import { LoginContext } from "../context/loginContext";
 import Toast from "../toast/Toast";
 import { useSelector } from "react-redux";
 
-var regex =
-  /(?:https?):\/\/(\w+:?\w*)?(\S+)(:\d+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/;
+var regex = /(?:https?):(\w+:?\w*)?(\S+)(:\d+)?(|([\w#!:.?+=&%!]))?/;
 const nameValidator = (value) => value.length >= 2;
 const photourlValidator = (value) => regex.test(value);
 export default function Home() {
@@ -158,7 +156,7 @@ export default function Home() {
           style={{ textAlign: "center", paddingTop: "3rem" }}
         >
           <span className="border border-primary p-3 ">
-            Your email is not verified.{" "}
+            Your email is not verified.
             <span
               style={{
                 color: "blue",
@@ -178,7 +176,7 @@ export default function Home() {
           style={{ textAlign: "center", paddingTop: "3rem" }}
         >
           <span className="border border-primary p-3">
-            Your profile is incomplete!{" "}
+            Your profile is incomplete!
             <span
               style={{
                 color: "blue",

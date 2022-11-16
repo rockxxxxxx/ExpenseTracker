@@ -1,9 +1,12 @@
-import { createSlice, configureStore } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
+
+const token = localStorage.getItem("auth_token");
+const email = localStorage.getItem("email");
 
 const initialState = {
-  isLoggedIn: false,
-  jwtToken: "",
-  userEmail: "",
+  isLoggedIn: token === null ? false : true,
+  jwtToken: token,
+  userEmail: email,
 };
 
 const authSlice = createSlice({
@@ -19,14 +22,10 @@ const authSlice = createSlice({
       state.isLoggedIn = false;
       state.jwtToken = "";
       state.userEmail = "";
+      localStorage.clear();
     },
   },
 });
 
-export const store = configureStore({
-  reducer: {
-    auth: authSlice.reducer,
-  },
-});
-
+export default authSlice.reducer;
 export const { login, logoutD } = authSlice.actions;

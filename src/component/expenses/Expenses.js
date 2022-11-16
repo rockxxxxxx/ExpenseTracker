@@ -1,35 +1,52 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Card from "../cards/Card";
-import { ExpenseDataContext } from "../context/expenseDataContext";
-import { LoginContext } from "../context/loginContext";
+
 import { ToasterContext } from "../context/toasterContext";
 import Toast from "../toast/Toast";
 import "./expense.css";
 import ExpenseData from "./ExpenseData";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { fetchExpense, postExpense } from "../../reducers/expenseReducer";
 
 export default function Expenses() {
-  const { userEmail } = useContext(LoginContext);
   const { isToaster, isMessage } = useContext(ToasterContext);
-  const {
-    getExpense,
-    amount,
-    setAmount,
-    description,
-    setDescription,
-    type,
-    setType,
-    addExpense,
-    onRefreshDataLoad,
-  } = useContext(ExpenseDataContext);
+  const dispatch = useDispatch();
+  const userEmail = useSelector((state) => state.auth.userEmail);
+  console.log(userEmail);
+
+  const [amount, setAmount] = useState("");
+  const [type, setType] = useState("");
+  const [description, setDescription] = useState("");
+  const getExpense = useSelector((state) => state.addExpenses.userExpense);
+  const expenseTotal = getExpense.reduce(
+    (total, expenseAmount) => parseInt(total) + parseInt(expenseAmount.amount),
+    0
+  );
 
   const onSubmithandler = (event) => {
+    const data = {
+      userEmail,
+      amount,
+      type,
+      description,
+    };
     event.preventDefault();
-    addExpense();
+    if (expenseTotal + amount <= 10000) {
+      dispatch(postExpense(data));
+    } else {
+      alert(
+        "You need a premium service for adding more than a total expense of ₹10,000"
+      );
+    }
   };
 
+  console.log(useSelector((state) => state));
+
   useEffect(() => {
-    onRefreshDataLoad();
-  }, [userEmail]);
+    //onRefreshDataLoad();
+    dispatch(fetchExpense(userEmail));
+  }, [userEmail, dispatch]);
 
   return (
     <>
@@ -105,7 +122,7 @@ export default function Expenses() {
               </select>
             </div>
 
-            <div class="col-3">
+            <div className="col-3">
               <button type="submit" className="btn btn-primary">
                 Submit
               </button>

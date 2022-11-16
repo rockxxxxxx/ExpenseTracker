@@ -2,7 +2,6 @@ import React, { useContext, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import useFormValidator from "../../hooks/useFormValidator";
 import Card from "../cards/Card";
-import { LoginContext } from "../context/loginContext";
 import { ToasterContext } from "../context/toasterContext";
 import Loader from "../loader/Loader";
 import Toast from "../toast/Toast";
@@ -16,7 +15,6 @@ const passwordValidator = (value) => value.length > 6;
 
 export default function Login() {
   const navigate = useNavigate();
-  const { setIsLoggedIn, setJwtToken, setUserEmail } = useContext(LoginContext);
   const [loader, setLoader] = useState(false);
   const { isMessage, setIsMessage, isToaster, setIsToaster } =
     useContext(ToasterContext);
@@ -169,7 +167,7 @@ export default function Login() {
               Don't have an account? <NavLink to="/signup">Signup</NavLink>
             </span>
             <span className="border border-primary p-3">
-              Frogot Password??{" "}
+              Frogot Password??
               <span
                 style={{
                   color: "blue",
@@ -179,7 +177,7 @@ export default function Login() {
                 onClick={() => setIsResetpassword(true)}
               >
                 Click here
-              </span>{" "}
+              </span>
               to reset!
             </span>
           </div>

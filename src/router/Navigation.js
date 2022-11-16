@@ -1,6 +1,5 @@
-import React, { useContext } from "react";
+import React from "react";
 import { NavLink, Outlet } from "react-router-dom";
-import { LoginContext } from "../component/context/loginContext";
 import Wave from "../component/wave/Wave";
 import "./navigation.css";
 import logo from "../logo.png";
@@ -15,7 +14,7 @@ import { logoutD } from "../reducers/authReducr";
 
 export default function Navigation() {
   const state = useSelector((state) => state.auth);
-  const { isLoggedIn, setUserEmail, setJwtToken, setIsLoggedIn } = state;
+  const { isLoggedIn } = state;
   const dispatch = useDispatch();
   const logout = () => {
     dispatch(logoutD());
@@ -32,7 +31,7 @@ export default function Navigation() {
               alt=""
               width="30"
               height="24"
-              class="d-inline-block align-text-top"
+              className="d-inline-block align-text-top"
             />
             Expense Tracker
           </NavLink>

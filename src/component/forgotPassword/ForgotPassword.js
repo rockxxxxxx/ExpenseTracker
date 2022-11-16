@@ -129,7 +129,7 @@ export default function ForgotPassword({ reset }) {
             onClick={() => reset(false)}
           >
             Click here
-          </span>{" "}
+          </span>
           to login
         </span>
       </div>
