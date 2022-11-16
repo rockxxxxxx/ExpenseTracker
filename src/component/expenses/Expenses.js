@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import Card from "../cards/Card";
-import { CSVLink, CSVDownload } from "react-csv";
+import { CSVLink } from "react-csv";
 
 import { ToasterContext } from "../context/toasterContext";
 import Toast from "../toast/Toast";
@@ -57,6 +57,7 @@ export default function Expenses() {
     dispatch(fetchExpense(userEmail));
   }, [userEmail, dispatch]);
   const premium = useSelector((state) => state.premium.permiumService);
+  const themeDefault = useSelector((state) => state.theme.themeDefault);
 
   return (
     <>
@@ -144,7 +145,11 @@ export default function Expenses() {
             </div>
           </form>
           <hr />
-          <table className="table table-striped table-hover">
+          <table
+            className={`table table-striped table-hover ${
+              themeDefault === true ? "table-light" : "table-dark"
+            }`}
+          >
             <thead>
               <tr>
                 <th scope="col">Amount</th>

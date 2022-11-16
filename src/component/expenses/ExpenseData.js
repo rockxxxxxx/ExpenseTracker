@@ -86,12 +86,12 @@ export default function ExpenseData({
         <td>{type}</td>
         <td>
           <span onClick={() => EditExpense(id)} style={{ cursor: "pointer" }}>
-            <img src={edit} alt="Edit" />{" "}
+            <img src={edit} alt="Edit" style={{ backgroundColor: "white" }} />
           </span>
           &nbsp;&nbsp;&nbsp;&nbsp;
           <span onClick={() => DeleteExpense(id)} style={{ cursor: "pointer" }}>
             {" "}
-            <img src={del} alt="Delete" />{" "}
+            <img src={del} alt="Delete" style={{ backgroundColor: "white" }} />
           </span>
         </td>
       </tr>
