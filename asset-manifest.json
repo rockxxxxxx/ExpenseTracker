@@ -1,0 +1,35 @@
+{
+  "files": {
+    "main.css": "/static/css/main.aab72007.css",
+    "main.js": "/static/js/main.c4007cf3.js",
+    "static/css/842.3f0742f6.chunk.css": "/static/css/842.3f0742f6.chunk.css",
+    "static/js/842.4b36c539.chunk.js": "/static/js/842.4b36c539.chunk.js",
+    "static/css/164.3ba07d21.chunk.css": "/static/css/164.3ba07d21.chunk.css",
+    "static/js/164.4b6bbeb4.chunk.js": "/static/js/164.4b6bbeb4.chunk.js",
+    "static/css/318.12fb0883.chunk.css": "/static/css/318.12fb0883.chunk.css",
+    "static/js/318.0892f42c.chunk.js": "/static/js/318.0892f42c.chunk.js",
+    "static/css/855.838aa683.chunk.css": "/static/css/855.838aa683.chunk.css",
+    "static/js/855.98c93a9b.chunk.js": "/static/js/855.98c93a9b.chunk.js",
+    "static/js/787.7d063411.chunk.js": "/static/js/787.7d063411.chunk.js",
+    "static/js/283.176152c1.chunk.js": "/static/js/283.176152c1.chunk.js",
+    "static/css/830.31d6cfe0.chunk.css": "/static/css/830.31d6cfe0.chunk.css",
+    "static/media/logo.png": "/static/media/logo.dd958640f1b0727ae1c8.png",
+    "index.html": "/index.html",
+    "main.aab72007.css.map": "/static/css/main.aab72007.css.map",
+    "main.c4007cf3.js.map": "/static/js/main.c4007cf3.js.map",
+    "842.3f0742f6.chunk.css.map": "/static/css/842.3f0742f6.chunk.css.map",
+    "842.4b36c539.chunk.js.map": "/static/js/842.4b36c539.chunk.js.map",
+    "164.3ba07d21.chunk.css.map": "/static/css/164.3ba07d21.chunk.css.map",
+    "164.4b6bbeb4.chunk.js.map": "/static/js/164.4b6bbeb4.chunk.js.map",
+    "318.12fb0883.chunk.css.map": "/static/css/318.12fb0883.chunk.css.map",
+    "318.0892f42c.chunk.js.map": "/static/js/318.0892f42c.chunk.js.map",
+    "855.838aa683.chunk.css.map": "/static/css/855.838aa683.chunk.css.map",
+    "855.98c93a9b.chunk.js.map": "/static/js/855.98c93a9b.chunk.js.map",
+    "787.7d063411.chunk.js.map": "/static/js/787.7d063411.chunk.js.map",
+    "283.176152c1.chunk.js.map": "/static/js/283.176152c1.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.aab72007.css",
+    "static/js/main.c4007cf3.js"
+  ]
+}
