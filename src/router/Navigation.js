@@ -86,16 +86,7 @@ export default function Navigation() {
                   <img src={exp} alt="Expenses" /> Expenses
                 </NavLink>
               </li>
-              <li class="nav-item">
-                <NavLink
-                  className={({ isActive }) =>
-                    isActive ? "active nav-link" : "nav-link"
-                  }
-                  to="/product"
-                >
-                  <img src={prod} alt="Product" /> Product
-                </NavLink>
-              </li>
+
               {!isLoggedIn && (
                 <li className="nav-item">
                   <NavLink
@@ -108,12 +99,7 @@ export default function Navigation() {
                   </NavLink>
                 </li>
               )}
-              <li className="nav-item">
-                <NavLink className="nav-link " to="/aboutus">
-                  <img src={about} alt="About Us" />
-                  About Us
-                </NavLink>
-              </li>
+
               {isLoggedIn && (
                 <li className="nav-item " onClick={() => logout()}>
                   <NavLink className="nav-link " to="/signup">
